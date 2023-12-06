@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="Apartments" EntityType="Model.Store.Apartments" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="Model.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UploadedFiles" EntityType="Model.Store.UploadedFiles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Reservations" EntityType="Model.Store.Reservations" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="Contact" Association="Model.Store.Contact">
+      <End Role="Apartment" EntitySet="Apartments" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reservations_Apartment" Association="Model.Store.FK_Reservations_Apartment">
+      <End Role="Apartment" EntitySet="Apartments" />
+      <End Role="Reservations" EntitySet="Reservations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reservations_User" Association="Model.Store.FK_Reservations_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Reservations" EntitySet="Reservations" />
+    </AssociationSet>
+    <AssociationSet Name="ApartmentUploadedFile" Association="Model.Store.ApartmentUploadedFile">
+      <End Role="Apartment" EntitySet="Apartments" />
+      <End Role="UploadedFile" EntitySet="UploadedFiles" />
+    </AssociationSet>
+    <AssociationSet Name="UserUploadedFile" Association="Model.Store.UserUploadedFile">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UploadedFile" EntitySet="UploadedFiles" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Apartments">
+    <Key>
+      <PropertyRef Name="Id_Aparment" />
+    </Key>
+    <Property Name="Id_Aparment" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Contact" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id_User" />
+    </Key>
+    <Property Name="Id_User" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Surname" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UploadedFile_Id_UploadedFile" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UploadedFiles">
+    <Key>
+      <PropertyRef Name="Id_UploadedFile" />
+    </Key>
+    <Property Name="Id_UploadedFile" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="ContentType" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Content" Type="varbinary(max)" Nullable="false" />
+    <Property Name="Apartment_Id_Aparment" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Reservations">
+    <Key>
+      <PropertyRef Name="ApartmentsRes_Id_Aparment" />
+      <PropertyRef Name="Users_Id_User" />
+    </Key>
+    <Property Name="ApartmentsRes_Id_Aparment" Type="int" Nullable="false" />
+    <Property Name="Users_Id_User" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="Contact">
+    <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="*" />
+    <End Role="User" Type="Model.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id_User" />
+      </Principal>
+      <Dependent Role="Apartment">
+        <PropertyRef Name="Contact" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ApartmentUploadedFile">
+    <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="0..1" />
+    <End Role="UploadedFile" Type="Model.Store.UploadedFiles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Apartment">
+        <PropertyRef Name="Id_Aparment" />
+      </Principal>
+      <Dependent Role="UploadedFile">
+        <PropertyRef Name="Apartment_Id_Aparment" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserUploadedFile">
+    <End Role="User" Type="Model.Store.Users" Multiplicity="*" />
+    <End Role="UploadedFile" Type="Model.Store.UploadedFiles" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="UploadedFile">
+        <PropertyRef Name="Id_UploadedFile" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="UploadedFile_Id_UploadedFile" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reservations_Apartment">
+    <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="1" />
+    <End Role="Reservations" Type="Model.Store.Reservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Apartment">
+        <PropertyRef Name="Id_Aparment" />
+      </Principal>
+      <Dependent Role="Reservations">
+        <PropertyRef Name="ApartmentsRes_Id_Aparment" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reservations_User">
+    <End Role="Reservations" Type="Model.Store.Reservations" Multiplicity="*" />
+    <End Role="User" Type="Model.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id_User" />
+      </Principal>
+      <Dependent Role="Reservations">
+        <PropertyRef Name="Users_Id_User" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="ModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Apartments" EntityType="Model.Apartment" />
+          <EntitySet Name="Users" EntityType="Model.User" />
+          <AssociationSet Name="Contact" Association="Model.Contact">
+            <End Role="Apartment" EntitySet="Apartments" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="Reservations" Association="Model.Reservations">
+            <End Role="Apartment" EntitySet="Apartments" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <EntitySet Name="UploadedFiles" EntityType="Model.UploadedFile" />
+          <AssociationSet Name="ApartmentUploadedFile" Association="Model.ApartmentUploadedFile">
+            <End Role="Apartment" EntitySet="Apartments" />
+            <End Role="UploadedFile" EntitySet="UploadedFiles" />
+          </AssociationSet>
+          <AssociationSet Name="UserUploadedFile" Association="Model.UserUploadedFile">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UploadedFile" EntitySet="UploadedFiles" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Apartment">
+          <Key>
+            <PropertyRef Name="Id_Aparment" />
+          </Key>
+          <Property Name="Id_Aparment" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="20" />
+          <NavigationProperty Name="User" Relationship="Model.Contact" FromRole="Apartment" ToRole="User" />
+          <Property Name="Contact" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Model.Reservations" FromRole="Apartment" ToRole="User" />
+          <NavigationProperty Name="UploadedFiles" Relationship="Model.ApartmentUploadedFile" FromRole="Apartment" ToRole="UploadedFile" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id_User" />
+          </Key>
+          <Property Name="Id_User" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Apartments" Relationship="Model.Contact" FromRole="User" ToRole="Apartment" />
+          <NavigationProperty Name="ApartmentsRes" Relationship="Model.Reservations" FromRole="User" ToRole="Apartment" />
+          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Surname" Type="String" Nullable="false" />
+          <Property Name="email" Type="String" Nullable="false" />
+          <NavigationProperty Name="UploadedFile" Relationship="Model.UserUploadedFile" FromRole="User" ToRole="UploadedFile" />
+        </EntityType>
+        <Association Name="Contact">
+          <End Type="Model.Apartment" Role="Apartment" Multiplicity="*" />
+          <End Type="Model.User" Role="User" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id_User" />
+            </Principal>
+            <Dependent Role="Apartment">
+              <PropertyRef Name="Contact" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Reservations">
+          <End Type="Model.Apartment" Role="Apartment" Multiplicity="*" />
+          <End Type="Model.User" Role="User" Multiplicity="*" />
+        </Association>
+        <EntityType Name="UploadedFile">
+          <Key>
+            <PropertyRef Name="Id_UploadedFile" />
+          </Key>
+          <Property Name="Id_UploadedFile" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" />
+          <Property Name="ContentType" Type="String" Nullable="false" MaxLength="20" />
+          <Property Name="Content" Type="Binary" Nullable="false" />
+          <NavigationProperty Name="Apartment" Relationship="Model.ApartmentUploadedFile" FromRole="UploadedFile" ToRole="Apartment" />
+          <NavigationProperty Name="User" Relationship="Model.UserUploadedFile" FromRole="UploadedFile" ToRole="User" />
+        </EntityType>
+        <Association Name="ApartmentUploadedFile">
+          <End Type="Model.Apartment" Role="Apartment" Multiplicity="0..1" />
+          <End Type="Model.UploadedFile" Role="UploadedFile" Multiplicity="*" />
+        </Association>
+        <Association Name="UserUploadedFile">
+          <End Type="Model.User" Role="User" Multiplicity="0..1" />
+          <End Type="Model.UploadedFile" Role="UploadedFile" Multiplicity="1" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="ModelContainer">
+    <EntitySetMapping Name="Apartments">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.Apartment)">
+        <MappingFragment StoreEntitySet="Apartments">
+          <ScalarProperty Name="Id_Aparment" ColumnName="Id_Aparment" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Contact" ColumnName="Contact" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id_User" ColumnName="Id_User" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Surname" ColumnName="Surname" />
+          <ScalarProperty Name="email" ColumnName="email" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UploadedFiles">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.UploadedFile)">
+        <MappingFragment StoreEntitySet="UploadedFiles">
+          <ScalarProperty Name="Id_UploadedFile" ColumnName="Id_UploadedFile" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="Reservations" TypeName="Model.Reservations" StoreEntitySet="Reservations">
+      <EndProperty Name="Apartment">
+        <ScalarProperty Name="Id_Aparment" ColumnName="ApartmentsRes_Id_Aparment" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id_User" ColumnName="Users_Id_User" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ApartmentUploadedFile" TypeName="Model.ApartmentUploadedFile" StoreEntitySet="UploadedFiles">
+      <EndProperty Name="Apartment">
+        <ScalarProperty Name="Id_Aparment" ColumnName="Apartment_Id_Aparment" />
+      </EndProperty>
+      <EndProperty Name="UploadedFile">
+        <ScalarProperty Name="Id_UploadedFile" ColumnName="Id_UploadedFile" />
+      </EndProperty>
+      <Condition ColumnName="Apartment_Id_Aparment" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserUploadedFile" TypeName="Model.UserUploadedFile" StoreEntitySet="Users">
+      <EndProperty Name="UploadedFile">
+        <ScalarProperty Name="Id_UploadedFile" ColumnName="UploadedFile_Id_UploadedFile" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id_User" ColumnName="Id_User" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

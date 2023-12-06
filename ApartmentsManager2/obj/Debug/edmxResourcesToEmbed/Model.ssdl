@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="Apartments" EntityType="Model.Store.Apartments" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="Model.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UploadedFiles" EntityType="Model.Store.UploadedFiles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Reservations" EntityType="Model.Store.Reservations" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="Contact" Association="Model.Store.Contact">
+      <End Role="Apartment" EntitySet="Apartments" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reservations_Apartment" Association="Model.Store.FK_Reservations_Apartment">
+      <End Role="Apartment" EntitySet="Apartments" />
+      <End Role="Reservations" EntitySet="Reservations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Reservations_User" Association="Model.Store.FK_Reservations_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Reservations" EntitySet="Reservations" />
+    </AssociationSet>
+    <AssociationSet Name="ApartmentUploadedFile" Association="Model.Store.ApartmentUploadedFile">
+      <End Role="Apartment" EntitySet="Apartments" />
+      <End Role="UploadedFile" EntitySet="UploadedFiles" />
+    </AssociationSet>
+    <AssociationSet Name="UserUploadedFile" Association="Model.Store.UserUploadedFile">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UploadedFile" EntitySet="UploadedFiles" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Apartments">
+    <Key>
+      <PropertyRef Name="Id_Aparment" />
+    </Key>
+    <Property Name="Id_Aparment" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="City" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Contact" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id_User" />
+    </Key>
+    <Property Name="Id_User" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Surname" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="email" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UploadedFile_Id_UploadedFile" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UploadedFiles">
+    <Key>
+      <PropertyRef Name="Id_UploadedFile" />
+    </Key>
+    <Property Name="Id_UploadedFile" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="ContentType" Type="nvarchar" Nullable="false" MaxLength="20" />
+    <Property Name="Content" Type="varbinary(max)" Nullable="false" />
+    <Property Name="Apartment_Id_Aparment" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Reservations">
+    <Key>
+      <PropertyRef Name="ApartmentsRes_Id_Aparment" />
+      <PropertyRef Name="Users_Id_User" />
+    </Key>
+    <Property Name="ApartmentsRes_Id_Aparment" Type="int" Nullable="false" />
+    <Property Name="Users_Id_User" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="Contact">
+    <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="*" />
+    <End Role="User" Type="Model.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id_User" />
+      </Principal>
+      <Dependent Role="Apartment">
+        <PropertyRef Name="Contact" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ApartmentUploadedFile">
+    <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="0..1" />
+    <End Role="UploadedFile" Type="Model.Store.UploadedFiles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Apartment">
+        <PropertyRef Name="Id_Aparment" />
+      </Principal>
+      <Dependent Role="UploadedFile">
+        <PropertyRef Name="Apartment_Id_Aparment" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserUploadedFile">
+    <End Role="User" Type="Model.Store.Users" Multiplicity="*" />
+    <End Role="UploadedFile" Type="Model.Store.UploadedFiles" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="UploadedFile">
+        <PropertyRef Name="Id_UploadedFile" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="UploadedFile_Id_UploadedFile" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reservations_Apartment">
+    <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="1" />
+    <End Role="Reservations" Type="Model.Store.Reservations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Apartment">
+        <PropertyRef Name="Id_Aparment" />
+      </Principal>
+      <Dependent Role="Reservations">
+        <PropertyRef Name="ApartmentsRes_Id_Aparment" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Reservations_User">
+    <End Role="Reservations" Type="Model.Store.Reservations" Multiplicity="*" />
+    <End Role="User" Type="Model.Store.Users" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id_User" />
+      </Principal>
+      <Dependent Role="Reservations">
+        <PropertyRef Name="Users_Id_User" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

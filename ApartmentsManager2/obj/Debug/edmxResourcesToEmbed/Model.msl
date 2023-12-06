@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="ModelContainer">
+    <EntitySetMapping Name="Apartments">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.Apartment)">
+        <MappingFragment StoreEntitySet="Apartments">
+          <ScalarProperty Name="Id_Aparment" ColumnName="Id_Aparment" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Contact" ColumnName="Contact" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Id_User" ColumnName="Id_User" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Surname" ColumnName="Surname" />
+          <ScalarProperty Name="email" ColumnName="email" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UploadedFiles">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.UploadedFile)">
+        <MappingFragment StoreEntitySet="UploadedFiles">
+          <ScalarProperty Name="Id_UploadedFile" ColumnName="Id_UploadedFile" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="Reservations" TypeName="Model.Reservations" StoreEntitySet="Reservations">
+      <EndProperty Name="Apartment">
+        <ScalarProperty Name="Id_Aparment" ColumnName="ApartmentsRes_Id_Aparment" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id_User" ColumnName="Users_Id_User" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ApartmentUploadedFile" TypeName="Model.ApartmentUploadedFile" StoreEntitySet="UploadedFiles">
+      <EndProperty Name="Apartment">
+        <ScalarProperty Name="Id_Aparment" ColumnName="Apartment_Id_Aparment" />
+      </EndProperty>
+      <EndProperty Name="UploadedFile">
+        <ScalarProperty Name="Id_UploadedFile" ColumnName="Id_UploadedFile" />
+      </EndProperty>
+      <Condition ColumnName="Apartment_Id_Aparment" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserUploadedFile" TypeName="Model.UserUploadedFile" StoreEntitySet="Users">
+      <EndProperty Name="UploadedFile">
+        <ScalarProperty Name="Id_UploadedFile" ColumnName="UploadedFile_Id_UploadedFile" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id_User" ColumnName="Id_User" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>
