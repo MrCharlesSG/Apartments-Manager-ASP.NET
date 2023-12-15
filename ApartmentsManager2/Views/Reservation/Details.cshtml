@@ -1,0 +1,50 @@
+﻿@model ApartmentsManager2.Reservation
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Reservation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserId_User)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.UserInfo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ApartmentId_Aparment)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Apartment.ApartmentInfo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Start_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StartDateFormated)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.End_Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EndDateFormated)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

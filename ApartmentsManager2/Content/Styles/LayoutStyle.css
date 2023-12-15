@@ -1,0 +1,31 @@
+﻿.container3{
+    margin-top:100px;
+    padding:20px
+}
+
+.navigationStyle {
+    background-color: #e2e8f0;
+}
+
+.navigationLink {
+    padding: 3px;
+    border-radius: 5px;
+    margin-left:3px
+}
+
+    .navigationLink:hover {
+        background-color: white;
+        color: #818cf8;
+    }
+
+.titleNavigation:hover {
+    background-color: white;
+    color: #818cf8;
+    font-weight: bold;
+}
+.titleNavigation {
+    border-radius: 5px;
+    padding: 5px;
+    color: black;
+    font-weight: bold;
+}

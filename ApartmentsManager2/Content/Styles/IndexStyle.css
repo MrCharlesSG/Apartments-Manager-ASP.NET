@@ -1,0 +1,28 @@
+﻿.container2 {
+    background-color: #f1f5f9;
+    padding: 15px;
+    border-radius:10px;
+    margin:15px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-decoration:none;
+    color:inherit;
+}
+
+    .container2:hover {
+        background-color: white;
+        color: #818cf8;
+    }
+
+.image {
+    width: 200px;
+}
+
+.bigContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

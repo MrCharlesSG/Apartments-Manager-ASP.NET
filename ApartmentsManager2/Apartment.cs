@@ -11,25 +11,40 @@ namespace ApartmentsManager2
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.Web;
+    using System.Web.Helpers;
+    using System.Web.Mvc;
+    using System.Xml.Linq;
+
     public partial class Apartment
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Apartment()
         {
-            this.Users = new HashSet<User>();
             this.UploadedFiles = new HashSet<UploadedFile>();
+            this.Reservations = new HashSet<Reservation>();
         }
-    
+        public int SelectedUserId { get; set; }
+        public IEnumerable<SelectListItem> UsersToSelect { get; set; }
+
         public int Id_Aparment { get; set; }
+        [Required]
+        [MaxLength(50, ErrorMessage = "{0} cannot be longer than 50")]
         public string Address { get; set; }
+        [Required]
+        [MaxLength(20, ErrorMessage = "{0} cannot be longer than 20")]
         public string City { get; set; }
+        [Required]
         public int Contact { get; set; }
-    
+        public string ApartmentInfo => $"{Address}, {City}";
+
+
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User> Users { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UploadedFile> UploadedFiles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Reservation> Reservations { get; set; }
+        public IEnumerable<HttpPostedFileBase> UploadedFilesHttp { get; set; }
     }
 }

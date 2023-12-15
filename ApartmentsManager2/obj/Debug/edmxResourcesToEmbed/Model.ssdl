@@ -9,14 +9,6 @@
       <End Role="Apartment" EntitySet="Apartments" />
       <End Role="User" EntitySet="Users" />
     </AssociationSet>
-    <AssociationSet Name="FK_Reservations_Apartment" Association="Model.Store.FK_Reservations_Apartment">
-      <End Role="Apartment" EntitySet="Apartments" />
-      <End Role="Reservations" EntitySet="Reservations" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Reservations_User" Association="Model.Store.FK_Reservations_User">
-      <End Role="User" EntitySet="Users" />
-      <End Role="Reservations" EntitySet="Reservations" />
-    </AssociationSet>
     <AssociationSet Name="ApartmentUploadedFile" Association="Model.Store.ApartmentUploadedFile">
       <End Role="Apartment" EntitySet="Apartments" />
       <End Role="UploadedFile" EntitySet="UploadedFiles" />
@@ -24,6 +16,14 @@
     <AssociationSet Name="UserUploadedFile" Association="Model.Store.UserUploadedFile">
       <End Role="User" EntitySet="Users" />
       <End Role="UploadedFile" EntitySet="UploadedFiles" />
+    </AssociationSet>
+    <AssociationSet Name="ReservationUser" Association="Model.Store.ReservationUser">
+      <End Role="Reservation" EntitySet="Reservations" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="ReservationApartment" Association="Model.Store.ReservationApartment">
+      <End Role="Reservation" EntitySet="Reservations" />
+      <End Role="Apartment" EntitySet="Apartments" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Apartments">
@@ -57,11 +57,13 @@
   </EntityType>
   <EntityType Name="Reservations">
     <Key>
-      <PropertyRef Name="ApartmentsRes_Id_Aparment" />
-      <PropertyRef Name="Users_Id_User" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="ApartmentsRes_Id_Aparment" Type="int" Nullable="false" />
-    <Property Name="Users_Id_User" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId_User" Type="int" Nullable="false" />
+    <Property Name="ApartmentId_Aparment" Type="int" Nullable="false" />
+    <Property Name="Start_Date" Type="datetime" Nullable="false" />
+    <Property Name="End_Date" Type="datetime" Nullable="false" />
   </EntityType>
   <Association Name="Contact">
     <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="*" />
@@ -99,27 +101,27 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Reservations_Apartment">
-    <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="1" />
-    <End Role="Reservations" Type="Model.Store.Reservations" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Apartment">
-        <PropertyRef Name="Id_Aparment" />
-      </Principal>
-      <Dependent Role="Reservations">
-        <PropertyRef Name="ApartmentsRes_Id_Aparment" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Reservations_User">
-    <End Role="Reservations" Type="Model.Store.Reservations" Multiplicity="*" />
+  <Association Name="ReservationUser">
+    <End Role="Reservation" Type="Model.Store.Reservations" Multiplicity="*" />
     <End Role="User" Type="Model.Store.Users" Multiplicity="1" />
     <ReferentialConstraint>
       <Principal Role="User">
         <PropertyRef Name="Id_User" />
       </Principal>
-      <Dependent Role="Reservations">
-        <PropertyRef Name="Users_Id_User" />
+      <Dependent Role="Reservation">
+        <PropertyRef Name="UserId_User" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ReservationApartment">
+    <End Role="Reservation" Type="Model.Store.Reservations" Multiplicity="*" />
+    <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Apartment">
+        <PropertyRef Name="Id_Aparment" />
+      </Principal>
+      <Dependent Role="Reservation">
+        <PropertyRef Name="ApartmentId_Aparment" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

@@ -14,14 +14,6 @@
       <End Role="Apartment" EntitySet="Apartments" />
       <End Role="User" EntitySet="Users" />
     </AssociationSet>
-    <AssociationSet Name="FK_Reservations_Apartment" Association="Model.Store.FK_Reservations_Apartment">
-      <End Role="Apartment" EntitySet="Apartments" />
-      <End Role="Reservations" EntitySet="Reservations" />
-    </AssociationSet>
-    <AssociationSet Name="FK_Reservations_User" Association="Model.Store.FK_Reservations_User">
-      <End Role="User" EntitySet="Users" />
-      <End Role="Reservations" EntitySet="Reservations" />
-    </AssociationSet>
     <AssociationSet Name="ApartmentUploadedFile" Association="Model.Store.ApartmentUploadedFile">
       <End Role="Apartment" EntitySet="Apartments" />
       <End Role="UploadedFile" EntitySet="UploadedFiles" />
@@ -29,6 +21,14 @@
     <AssociationSet Name="UserUploadedFile" Association="Model.Store.UserUploadedFile">
       <End Role="User" EntitySet="Users" />
       <End Role="UploadedFile" EntitySet="UploadedFiles" />
+    </AssociationSet>
+    <AssociationSet Name="ReservationUser" Association="Model.Store.ReservationUser">
+      <End Role="Reservation" EntitySet="Reservations" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="ReservationApartment" Association="Model.Store.ReservationApartment">
+      <End Role="Reservation" EntitySet="Reservations" />
+      <End Role="Apartment" EntitySet="Apartments" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Apartments">
@@ -62,11 +62,13 @@
   </EntityType>
   <EntityType Name="Reservations">
     <Key>
-      <PropertyRef Name="ApartmentsRes_Id_Aparment" />
-      <PropertyRef Name="Users_Id_User" />
+      <PropertyRef Name="Id" />
     </Key>
-    <Property Name="ApartmentsRes_Id_Aparment" Type="int" Nullable="false" />
-    <Property Name="Users_Id_User" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId_User" Type="int" Nullable="false" />
+    <Property Name="ApartmentId_Aparment" Type="int" Nullable="false" />
+    <Property Name="Start_Date" Type="datetime" Nullable="false" />
+    <Property Name="End_Date" Type="datetime" Nullable="false" />
   </EntityType>
   <Association Name="Contact">
     <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="*" />
@@ -104,27 +106,27 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Reservations_Apartment">
-    <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="1" />
-    <End Role="Reservations" Type="Model.Store.Reservations" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Apartment">
-        <PropertyRef Name="Id_Aparment" />
-      </Principal>
-      <Dependent Role="Reservations">
-        <PropertyRef Name="ApartmentsRes_Id_Aparment" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_Reservations_User">
-    <End Role="Reservations" Type="Model.Store.Reservations" Multiplicity="*" />
+  <Association Name="ReservationUser">
+    <End Role="Reservation" Type="Model.Store.Reservations" Multiplicity="*" />
     <End Role="User" Type="Model.Store.Users" Multiplicity="1" />
     <ReferentialConstraint>
       <Principal Role="User">
         <PropertyRef Name="Id_User" />
       </Principal>
-      <Dependent Role="Reservations">
-        <PropertyRef Name="Users_Id_User" />
+      <Dependent Role="Reservation">
+        <PropertyRef Name="UserId_User" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ReservationApartment">
+    <End Role="Reservation" Type="Model.Store.Reservations" Multiplicity="*" />
+    <End Role="Apartment" Type="Model.Store.Apartments" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Apartment">
+        <PropertyRef Name="Id_Aparment" />
+      </Principal>
+      <Dependent Role="Reservation">
+        <PropertyRef Name="ApartmentId_Aparment" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -139,10 +141,6 @@
             <End Role="Apartment" EntitySet="Apartments" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
-          <AssociationSet Name="Reservations" Association="Model.Reservations">
-            <End Role="Apartment" EntitySet="Apartments" />
-            <End Role="User" EntitySet="Users" />
-          </AssociationSet>
           <EntitySet Name="UploadedFiles" EntityType="Model.UploadedFile" />
           <AssociationSet Name="ApartmentUploadedFile" Association="Model.ApartmentUploadedFile">
             <End Role="Apartment" EntitySet="Apartments" />
@@ -152,18 +150,27 @@
             <End Role="User" EntitySet="Users" />
             <End Role="UploadedFile" EntitySet="UploadedFiles" />
           </AssociationSet>
+          <EntitySet Name="Reservations" EntityType="Model.Reservation" />
+          <AssociationSet Name="ReservationUser" Association="Model.ReservationUser">
+            <End Role="Reservation" EntitySet="Reservations" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="ReservationApartment" Association="Model.ReservationApartment">
+            <End Role="Reservation" EntitySet="Reservations" />
+            <End Role="Apartment" EntitySet="Apartments" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Apartment">
           <Key>
             <PropertyRef Name="Id_Aparment" />
           </Key>
           <Property Name="Id_Aparment" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Address" Type="String" Nullable="false" MaxLength="50" />
-          <Property Name="City" Type="String" Nullable="false" MaxLength="20" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="City" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="User" Relationship="Model.Contact" FromRole="Apartment" ToRole="User" />
           <Property Name="Contact" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Users" Relationship="Model.Reservations" FromRole="Apartment" ToRole="User" />
           <NavigationProperty Name="UploadedFiles" Relationship="Model.ApartmentUploadedFile" FromRole="Apartment" ToRole="UploadedFile" />
+          <NavigationProperty Name="Reservations" Relationship="Model.ReservationApartment" FromRole="Apartment" ToRole="Reservation" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -171,11 +178,11 @@
           </Key>
           <Property Name="Id_User" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Apartments" Relationship="Model.Contact" FromRole="User" ToRole="Apartment" />
-          <NavigationProperty Name="ApartmentsRes" Relationship="Model.Reservations" FromRole="User" ToRole="Apartment" />
-          <Property Name="Name" Type="String" Nullable="false" />
-          <Property Name="Surname" Type="String" Nullable="false" />
-          <Property Name="email" Type="String" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Surname" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="UploadedFile" Relationship="Model.UserUploadedFile" FromRole="User" ToRole="UploadedFile" />
+          <NavigationProperty Name="Reservations" Relationship="Model.ReservationUser" FromRole="User" ToRole="Reservation" />
         </EntityType>
         <Association Name="Contact">
           <End Type="Model.Apartment" Role="Apartment" Multiplicity="*" />
@@ -189,18 +196,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Reservations">
-          <End Type="Model.Apartment" Role="Apartment" Multiplicity="*" />
-          <End Type="Model.User" Role="User" Multiplicity="*" />
-        </Association>
         <EntityType Name="UploadedFile">
           <Key>
             <PropertyRef Name="Id_UploadedFile" />
           </Key>
           <Property Name="Id_UploadedFile" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" />
-          <Property Name="ContentType" Type="String" Nullable="false" MaxLength="20" />
-          <Property Name="Content" Type="Binary" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="ContentType" Type="String" Nullable="false" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="Content" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
           <NavigationProperty Name="Apartment" Relationship="Model.ApartmentUploadedFile" FromRole="UploadedFile" ToRole="Apartment" />
           <NavigationProperty Name="User" Relationship="Model.UserUploadedFile" FromRole="UploadedFile" ToRole="User" />
         </EntityType>
@@ -211,6 +214,42 @@
         <Association Name="UserUploadedFile">
           <End Type="Model.User" Role="User" Multiplicity="0..1" />
           <End Type="Model.UploadedFile" Role="UploadedFile" Multiplicity="1" />
+        </Association>
+        <EntityType Name="Reservation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="User" Relationship="Model.ReservationUser" FromRole="Reservation" ToRole="User" />
+          <Property Name="UserId_User" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Apartment" Relationship="Model.ReservationApartment" FromRole="Reservation" ToRole="Apartment" />
+          <Property Name="ApartmentId_Aparment" Type="Int32" Nullable="false" />
+          <Property Name="Start_Date" Type="DateTime" Nullable="false" />
+          <Property Name="End_Date" Type="DateTime" Nullable="false" />
+        </EntityType>
+        <Association Name="ReservationUser">
+          <End Type="Model.Reservation" Role="Reservation" Multiplicity="*" />
+          <End Type="Model.User" Role="User" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id_User" />
+            </Principal>
+            <Dependent Role="Reservation">
+              <PropertyRef Name="UserId_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ReservationApartment">
+          <End Type="Model.Reservation" Role="Reservation" Multiplicity="*" />
+          <End Type="Model.Apartment" Role="Apartment" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Apartment">
+              <PropertyRef Name="Id_Aparment" />
+            </Principal>
+            <Dependent Role="Reservation">
+              <PropertyRef Name="ApartmentId_Aparment" />
+            </Dependent>
+          </ReferentialConstraint>
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -248,14 +287,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="Reservations" TypeName="Model.Reservations" StoreEntitySet="Reservations">
-      <EndProperty Name="Apartment">
-        <ScalarProperty Name="Id_Aparment" ColumnName="ApartmentsRes_Id_Aparment" />
-      </EndProperty>
-      <EndProperty Name="User">
-        <ScalarProperty Name="Id_User" ColumnName="Users_Id_User" />
-      </EndProperty>
-    </AssociationSetMapping>
+    <EntitySetMapping Name="Reservations">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.Reservation)">
+        <MappingFragment StoreEntitySet="Reservations">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId_User" ColumnName="UserId_User" />
+          <ScalarProperty Name="ApartmentId_Aparment" ColumnName="ApartmentId_Aparment" />
+          <ScalarProperty Name="Start_Date" ColumnName="Start_Date" />
+          <ScalarProperty Name="End_Date" ColumnName="End_Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <AssociationSetMapping Name="ApartmentUploadedFile" TypeName="Model.ApartmentUploadedFile" StoreEntitySet="UploadedFiles">
       <EndProperty Name="Apartment">
         <ScalarProperty Name="Id_Aparment" ColumnName="Apartment_Id_Aparment" />
@@ -289,6 +331,7 @@
         <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
         <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
       </DesignerInfoPropertySet>
     </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->

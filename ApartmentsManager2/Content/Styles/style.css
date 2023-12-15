@@ -1,0 +1,65 @@
+﻿
+.trClass {
+    background-color: white;
+    cursor:pointer
+
+}
+
+    .trClass:hover {
+        background-color: #f8fafc;
+    }
+
+
+.createButton {
+    background-color: #22c55e;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+    .createButton:hover {
+        background-color: #4ade80;
+        color: white;
+    }
+
+
+.title-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit-button {
+    background-color: #8b5cf6;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: white;
+    text-decoration: none;
+    margin: 3px;
+}
+
+    .edit-button:hover {
+        background-color: #a78bfa;
+        color: white;
+    }
+.delete-button {
+    background-color: #e11d48;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 3px;
+    padding-left:10px;
+    padding-right:10px;
+    color: white;
+    text-decoration: none;
+    margin: 3px;
+}
+
+    .delete-button:hover {
+        background-color: #f43f5e;
+        color: white;
+    }

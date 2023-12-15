@@ -1,0 +1,69 @@
+﻿@model ApartmentsManager2.Apartment
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Apartment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.City)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Contact)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.UserInfo)
+        </dd>
+
+        @foreach (var uplodadedFile in Model.UploadedFiles)
+        {
+
+            <dt>
+                @uplodadedFile.Name
+            </dt>
+
+            <dd style="margin-top: 10px">
+                <img src="~/File?id=@uplodadedFile.Id_UploadedFile"
+                     alt="Picture"
+                     width="300"
+                     height="300" />
+            </dd>
+        }
+
+        <dt>Reservations</dt>
+        @foreach (var reservation in Model.Reservations)
+        {
+
+            <dt>
+                @reservation.ReservationInfo
+            </dt>
+            <dd>
+                @reservation.User.UserInfo
+            </dd>
+        }
+        
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new {  id = Model.Id_Aparment }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

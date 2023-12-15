@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 12/06/2023 13:12:00
+-- Date Created: 12/13/2023 10:31:10
 -- Generated from EDMX file: C:\Users\cserr\source\repos\ApartmentsManager2\ApartmentsManager2\Model.edmx
 -- --------------------------------------------------
 
@@ -17,11 +17,38 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[FK_Contact]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Apartments] DROP CONSTRAINT [FK_Contact];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ApartmentUploadedFile]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UploadedFiles] DROP CONSTRAINT [FK_ApartmentUploadedFile];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserUploadedFile]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Users] DROP CONSTRAINT [FK_UserUploadedFile];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ReservationUser]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Reservations] DROP CONSTRAINT [FK_ReservationUser];
+GO
+IF OBJECT_ID(N'[dbo].[FK_ReservationApartment]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Reservations] DROP CONSTRAINT [FK_ReservationApartment];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[Apartments]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Apartments];
+GO
+IF OBJECT_ID(N'[dbo].[Users]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Users];
+GO
+IF OBJECT_ID(N'[dbo].[UploadedFiles]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UploadedFiles];
+GO
+IF OBJECT_ID(N'[dbo].[Reservations]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Reservations];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -58,8 +85,11 @@ GO
 
 -- Creating table 'Reservations'
 CREATE TABLE [dbo].[Reservations] (
-    [ApartmentsRes_Id_Aparment] int  NOT NULL,
-    [Users_Id_User] int  NOT NULL
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [UserId_User] int  NOT NULL,
+    [ApartmentId_Aparment] int  NOT NULL,
+    [Start_Date] datetime  NOT NULL,
+    [End_Date] datetime  NOT NULL
 );
 GO
 
@@ -85,10 +115,10 @@ ADD CONSTRAINT [PK_UploadedFiles]
     PRIMARY KEY CLUSTERED ([Id_UploadedFile] ASC);
 GO
 
--- Creating primary key on [ApartmentsRes_Id_Aparment], [Users_Id_User] in table 'Reservations'
+-- Creating primary key on [Id] in table 'Reservations'
 ALTER TABLE [dbo].[Reservations]
 ADD CONSTRAINT [PK_Reservations]
-    PRIMARY KEY CLUSTERED ([ApartmentsRes_Id_Aparment], [Users_Id_User] ASC);
+    PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
 -- --------------------------------------------------
@@ -108,30 +138,6 @@ GO
 CREATE INDEX [IX_FK_Contact]
 ON [dbo].[Apartments]
     ([Contact]);
-GO
-
--- Creating foreign key on [ApartmentsRes_Id_Aparment] in table 'Reservations'
-ALTER TABLE [dbo].[Reservations]
-ADD CONSTRAINT [FK_Reservations_Apartment]
-    FOREIGN KEY ([ApartmentsRes_Id_Aparment])
-    REFERENCES [dbo].[Apartments]
-        ([Id_Aparment])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating foreign key on [Users_Id_User] in table 'Reservations'
-ALTER TABLE [dbo].[Reservations]
-ADD CONSTRAINT [FK_Reservations_User]
-    FOREIGN KEY ([Users_Id_User])
-    REFERENCES [dbo].[Users]
-        ([Id_User])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating non-clustered index for FOREIGN KEY 'FK_Reservations_User'
-CREATE INDEX [IX_FK_Reservations_User]
-ON [dbo].[Reservations]
-    ([Users_Id_User]);
 GO
 
 -- Creating foreign key on [Apartment_Id_Aparment] in table 'UploadedFiles'
@@ -162,6 +168,36 @@ GO
 CREATE INDEX [IX_FK_UserUploadedFile]
 ON [dbo].[Users]
     ([UploadedFile_Id_UploadedFile]);
+GO
+
+-- Creating foreign key on [UserId_User] in table 'Reservations'
+ALTER TABLE [dbo].[Reservations]
+ADD CONSTRAINT [FK_ReservationUser]
+    FOREIGN KEY ([UserId_User])
+    REFERENCES [dbo].[Users]
+        ([Id_User])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_ReservationUser'
+CREATE INDEX [IX_FK_ReservationUser]
+ON [dbo].[Reservations]
+    ([UserId_User]);
+GO
+
+-- Creating foreign key on [ApartmentId_Aparment] in table 'Reservations'
+ALTER TABLE [dbo].[Reservations]
+ADD CONSTRAINT [FK_ReservationApartment]
+    FOREIGN KEY ([ApartmentId_Aparment])
+    REFERENCES [dbo].[Apartments]
+        ([Id_Aparment])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_ReservationApartment'
+CREATE INDEX [IX_FK_ReservationApartment]
+ON [dbo].[Reservations]
+    ([ApartmentId_Aparment]);
 GO
 
 -- --------------------------------------------------

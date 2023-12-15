@@ -28,5 +28,6 @@ namespace ApartmentsManager2
         public virtual DbSet<Apartment> Apartments { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UploadedFile> UploadedFiles { get; set; }
+        public virtual DbSet<Reservation> Reservations { get; set; }
     }
 }

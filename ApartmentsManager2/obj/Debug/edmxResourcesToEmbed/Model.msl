@@ -31,14 +31,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="Reservations" TypeName="Model.Reservations" StoreEntitySet="Reservations">
-      <EndProperty Name="Apartment">
-        <ScalarProperty Name="Id_Aparment" ColumnName="ApartmentsRes_Id_Aparment" />
-      </EndProperty>
-      <EndProperty Name="User">
-        <ScalarProperty Name="Id_User" ColumnName="Users_Id_User" />
-      </EndProperty>
-    </AssociationSetMapping>
+    <EntitySetMapping Name="Reservations">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.Reservation)">
+        <MappingFragment StoreEntitySet="Reservations">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId_User" ColumnName="UserId_User" />
+          <ScalarProperty Name="ApartmentId_Aparment" ColumnName="ApartmentId_Aparment" />
+          <ScalarProperty Name="Start_Date" ColumnName="Start_Date" />
+          <ScalarProperty Name="End_Date" ColumnName="End_Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <AssociationSetMapping Name="ApartmentUploadedFile" TypeName="Model.ApartmentUploadedFile" StoreEntitySet="UploadedFiles">
       <EndProperty Name="Apartment">
         <ScalarProperty Name="Id_Aparment" ColumnName="Apartment_Id_Aparment" />

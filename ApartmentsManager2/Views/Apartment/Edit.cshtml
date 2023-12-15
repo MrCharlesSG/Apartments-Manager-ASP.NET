@@ -1,0 +1,95 @@
+﻿@model ApartmentsManager2.Apartment
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm(
+    "Edit",
+    "Apartment",
+    null,
+    FormMethod.Post,
+    new { enctype = "multipart/form-data" }
+    ))
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h4>Apartment</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Contact, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.Contact, Model.UsersToSelect, "Select User", new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Pictures", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input type="file"
+                   id="Picture"
+                   multiple
+                   accept="image/*"
+                   name="UploadedFiles" />
+        </div>
+    </div>
+
+    @foreach (var uplodadedFile in Model.UploadedFiles)
+    {
+        <div class="form-group">
+            <span class="control-label col-md-2">
+                <strong>@uplodadedFile.Name</strong> <br />
+                @Ajax.ActionLink(
+                    "Delete",
+                    "Delete",
+                    "File",
+                    new { id = uplodadedFile.Id_UploadedFile },
+                    new AjaxOptions() { HttpMethod = "Post" }
+                 )
+            </span>
+            <div class="col-md-10">
+                <img src="~/File?id=@uplodadedFile.Id_UploadedFile"
+                     alt="Picture"
+                     width="300"
+                     height="300" />
+            </div>
+        </div>
+    }
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -4,14 +4,16 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="74152da43c7746298741edf27667da44" Name="Diagram1" ZoomLevel="64" >
+      <Diagram DiagramId="74152da43c7746298741edf27667da44" Name="Diagram1" ZoomLevel="83" >
         <EntityTypeShape EntityType="Model.Apartment" Width="1.5" PointX="0.75" PointY="4.375" />
         <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="0.75" PointY="1" />
         <AssociationConnector Association="Model.Contact" />
-        <AssociationConnector Association="Model.Reservations" />
-        <EntityTypeShape EntityType="Model.UploadedFile" Width="1.5" PointX="3.125" PointY="2.75" />
+        <EntityTypeShape EntityType="Model.UploadedFile" Width="1.5" PointX="5.125" PointY="2.75" />
         <AssociationConnector Association="Model.ApartmentUploadedFile" />
         <AssociationConnector Association="Model.UserUploadedFile" />
+        <EntityTypeShape EntityType="Model.Reservation" Width="1.5" PointX="3.125" PointY="2.5" />
+        <AssociationConnector Association="Model.ReservationUser" />
+        <AssociationConnector Association="Model.ReservationApartment" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
